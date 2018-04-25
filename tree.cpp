@@ -8,7 +8,7 @@ tree::tree()
 
 tree::tree(int item)
 {
-    this->root = new_node(item);
+    root = new_node(item);
     isEmpty = false;
 }
 
@@ -19,7 +19,13 @@ tree::~tree()
 
 void tree::add(int item)
 {
-    insert(this->root, item);
+    if (isEmpty) {
+        root = new node;
+        root->data = item;
+        isEmpty = false;
+    } else {
+        root = insert(root, item);
+    }
 }
 
 void tree::remove(int item)
@@ -52,8 +58,8 @@ node * right_rotation(node * parent)
     node * t = parent->left;
     parent->left = t->right;
     t->right = parent;
-    fixheight(t);
     fixheight(parent);
+    fixheight(t);
 
     return t;
 }
@@ -63,8 +69,8 @@ node * left_rotation(node * parent)
     node * t = parent->right;
     parent->right = t->left;
     t->left = parent;
-    fixheight(t);
     fixheight(parent);
+    fixheight(t);
 
     return t;
 }
@@ -97,7 +103,7 @@ node * insert(node * n, int item)
 {
     if(!n) {
         n = new_node(item);
-        return n;
+        return n;  
     }
 
     if (item > n->data) {
@@ -123,19 +129,26 @@ int max_height(node * left, node * right)
 }
 
 void fixheight(node * n) {
-    n->height = max_height(n->left, n->right);
+    n->height = max_height(n->left, n->right) + 1;
 }
 
 int bfactor(node * n)
 {
-    return height(n->left) - height(n->right);
+    int hr = n->right ? n->right->height + 1 : 0;
+    int hl = n->left ? n->left->height + 1: 0;
+
+    return hl - hr;
+
 }
 
 node * new_node(int item)
 {
-    node * t = new node();
+    node * t = new node();  
     t->data = item;
     t->height = 0;
+    t->left = t->right = NULL;
+
+    return t;
 }
 
 void inorder_traversal(node * root) 
