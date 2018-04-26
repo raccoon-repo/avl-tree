@@ -17,5 +17,12 @@ int main()
 
     tree1.postorder(); // 1-3-2-9-21-20-11-8
 
+
+    tree1.remove(8);
+    tree1.remove(9);
+
+    std::cout << std::endl;
+
+    tree1.postorder();
     return 0;
 }

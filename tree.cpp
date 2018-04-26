@@ -30,7 +30,10 @@ void tree::add(int item)
 
 void tree::remove(int item)
 {
-
+    if (!contains(item))
+        return;
+    
+    this->root = tproc::remove(this->root, item);
 }
 
 void tree::inorder() const
@@ -48,9 +51,26 @@ void tree::preorder() const
     preorder_traversal(root);
 }
 
-bool tree::contains() const
+bool tree::contains(int item) const
 {
+    node * temp = root;
+
+    while (temp)
+    {
+        if (item > temp->data)
+            temp = temp->right;
+        else if (item < temp->data)
+            temp = temp->left;
+        else if (item == temp->data)
+            return true;
+    }
+
     return false;
+}
+
+int tree::findSecondLargest() const
+{
+    return root->right ? root->right->data : -1;
 }
 
 node * right_rotation(node * parent)
@@ -190,4 +210,45 @@ void delete_post_order(node * root)
     delete_post_order(root->left);
     delete_post_order(root->right);
     delete root;
+}
+
+
+node * findmin(node * root)
+{
+    node * t = root;
+
+    while (t && t->left != NULL)
+        t = t->left;
+    return t;
+}
+
+node * remove_min(node * root)
+{
+    if (root->left == NULL)
+        return root->right;
+    root->left = remove_min(root->left);
+    return balance(root);
+}
+
+node * tproc::remove(node * root, int item)
+{
+    if (!root) return NULL;
+    if (item > root->data)
+        root->right = tproc::remove(root->right, item);
+    else if (item < root->data)
+        root->left = tproc::remove(root->left, item);
+    else
+    {
+        node * l = root->left;
+        node * r = root->right;
+        delete root;
+        if (!r) return l;
+        node * min = findmin(r);
+        min->right = remove_min(r);
+        min->left = l;
+
+        return balance(min);
+    }
+
+    return balance(root);
 }

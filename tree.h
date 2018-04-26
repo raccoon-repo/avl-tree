@@ -23,7 +23,9 @@ public:
     void inorder() const;
     void preorder() const;
     void postorder() const;
-    bool contains() const;
+    bool contains(int item) const;
+
+    int findSecondLargest() const;
 };
 
 node * insert(node * root, int item);
@@ -31,7 +33,12 @@ node * new_node(int item);
 node * right_rotation(node * root);
 node * left_rotation(node * root);
 node * balance(node * root);
+node * findmin(node * root);
+node * remove_min(node * root);
 
+namespace tproc {
+    node * remove(node * root, int item);
+}
 void fixheight(node * root);
 void inorder_traversal(node * root);
 void preorder_traversal(node * root);
