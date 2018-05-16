@@ -26,20 +26,30 @@ public:
     bool contains(int item) const;
 
     int findSecondLargest() const;
+    int findMiddle() const;
+
+    static tree * init(int * array, int size);
 };
 
-node * insert(node * root, int item);
 node * new_node(int item);
+
+node * insert(node * root, int item);
 node * right_rotation(node * root);
 node * left_rotation(node * root);
 node * balance(node * root);
 node * findmin(node * root);
 node * remove_min(node * root);
 
+int middle(int value, node * cur, node * prev);
+int max(node * root);
+int min(node * root);
+
 namespace tproc {
     node * remove(node * root, int item);
 }
+
 void fixheight(node * root);
+
 void inorder_traversal(node * root);
 void preorder_traversal(node * root);
 void postorder_traversal(node * root);

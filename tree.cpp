@@ -1,5 +1,6 @@
 #include <iostream>
 #include "tree.h"
+#include <cmath>
 
 tree::tree()
 {
@@ -15,6 +16,15 @@ tree::tree(int item)
 tree::~tree()
 {
     delete_post_order(root);
+}
+
+tree * tree::init(int * array, int size)
+{
+    tree * t = new tree();
+    for (int i = 0; i < size; i++)
+        (*t).add(array[i]);
+    
+    return t;
 }
 
 void tree::add(int item)
@@ -70,7 +80,60 @@ bool tree::contains(int item) const
 
 int tree::findSecondLargest() const
 {
-    return root->right ? root->right->data : -1;
+    return root->right ? root->right->data : root->data;
+}
+
+int tree::findMiddle() const
+{
+    int min_val = min(root);
+    int max_val = max(root);
+
+    int middle_val = (max_val + min_val) / 2;
+
+    if (contains(middle_val)) return middle_val;
+
+    return middle(middle_val, root, root);
+}
+
+int middle(int value, node * cur, node * prev)
+{
+    if (cur)
+    {
+        int absDiffCur = std::abs(value - cur->data);
+        int absDiffPrev = std::abs(value - prev->data);
+
+        if (value > cur->data)
+        {
+            
+            if (!cur->right)    
+            {
+                return absDiffCur < absDiffPrev ? cur->data
+                                                : prev->data; 
+            }
+
+            int res = middle(value, cur->right, cur);
+            int absDiffRes = std::abs(value - res);
+            
+            return absDiffCur < absDiffRes ? cur->data
+                                           : res;
+        }
+        else
+        {
+            if (!cur->left)    
+            {
+                return absDiffCur < absDiffPrev ? cur->data
+                                                : prev->data; 
+            }
+
+            int res = middle(value, cur->left, cur);
+            int absDiffRes = std::abs(value - res);
+            
+            return absDiffCur < absDiffRes ? cur->data
+                                           : res;
+        }
+    }
+
+    return 0;
 }
 
 node * right_rotation(node * parent)
@@ -100,16 +163,16 @@ node * balance(node * n)
     fixheight(n);
     int bfact = bfactor(n);
 
-    if(bfact == 2) 
+    if(bfact == -2) 
     {
-        if(bfactor(n->left) < 0) {
+        if(bfactor(n->left) > 0) {
             n->left = left_rotation(n->left);
         }
         return right_rotation(n);
     }
-    else if(bfact == -2)
+    else if(bfact == 2)
     {
-        if(bfactor(n->right) > 0) {
+        if(bfactor(n->right) < 0) {
             n->right = right_rotation(n->right);
         }
         return left_rotation(n);
@@ -137,7 +200,7 @@ node * insert(node * n, int item)
 
 int height(node * n) 
 {
-    return n ? n->height : 0;
+    return n ? n->height : - 1;
 }
 
 int max_height(node * left, node * right)
@@ -154,10 +217,10 @@ void fixheight(node * n) {
 
 int bfactor(node * n)
 {
-    int hr = n->right ? n->right->height + 1 : 0;
-    int hl = n->left ? n->left->height + 1: 0;
+    int hr = height(n->right) + 1;
+    int hl = height(n->left) + 1;
 
-    return hl - hr;
+    return hr - hl;
 
 }
 
@@ -251,4 +314,20 @@ node * tproc::remove(node * root, int item)
     }
 
     return balance(root);
+}
+
+int min(node * root) {
+    node * t = root;
+
+    while (t && t->left) { t = t->left; }
+    if (!t) return 0;
+    return t->data; 
+}
+
+int max(node * root) {
+    node * t = root;
+
+    while (t && t->right) { t = t->right; }
+    if (!t) return 0;
+    return t->data;
 }

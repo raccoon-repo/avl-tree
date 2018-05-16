@@ -4,25 +4,10 @@
 
 int main()
 {
-    tree tree1 = tree();
+    int values[] = {8, 13, 19, 10, 16, 14, 22, 31, 32, 26, 30}; 
 
-    tree1.add(8);
-    tree1.add(9);
-    tree1.add(1);
-    tree1.add(3);
-    tree1.add(11);
-    tree1.add(2);
-    tree1.add(20);
-    tree1.add(21);
+    tree * t = tree::init(values, 11);
+    std::cout << (*t).findMiddle() << std::endl; // 19
 
-    tree1.postorder(); // 1-3-2-9-21-20-11-8
-
-
-    tree1.remove(8);
-    tree1.remove(9);
-
-    std::cout << std::endl;
-
-    tree1.postorder();
     return 0;
 }
