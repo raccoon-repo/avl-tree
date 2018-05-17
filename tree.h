@@ -45,6 +45,7 @@ int max(node * root);
 int min(node * root);
 
 namespace tproc {
+    int findSecondLargest(node * root);
     node * remove(node * root, int item);
 }
 

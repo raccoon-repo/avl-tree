@@ -9,5 +9,9 @@ int main()
     tree * t = tree::init(values, 11);
     std::cout << (*t).findMiddle() << std::endl; // 19
 
+    std::cout << (*t).findSecondLargest() << std::endl;
+
+    delete t;
+
     return 0;
 }

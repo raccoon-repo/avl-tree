@@ -80,7 +80,15 @@ bool tree::contains(int item) const
 
 int tree::findSecondLargest() const
 {
-    return root->right ? root->right->data : root->data;
+    return tproc::findSecondLargest(root);
+}
+
+int tproc::findSecondLargest(node * root)
+{
+    return
+    root->right ? (root->right->right ? findSecondLargest(root->right)
+                                      : root->data)
+                : root->data; 
 }
 
 int tree::findMiddle() const
